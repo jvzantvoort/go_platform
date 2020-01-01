@@ -35,20 +35,22 @@
 package go_platform
 
 import (
-	"io/ioutil"
+	"log"
+	"bufio"
 	"os"
-	"fmt"
 	"runtime"
 )
 
 type OSRelease struct {
+	kernel  string
+	MajorVersion string
 	Version string
 	Name    string
 }
 
 type LSBInfo struct {
-	Filename string
-	Name     string
+	Filename   string
+	Name       string
 	AllowEmpty bool
 }
 
@@ -93,25 +95,39 @@ func getInfoSets() []LSBInfo {
 	return retv
 }
 
-/*
-    SEARCH_STRING = {
-        'OracleLinux': 'Oracle Linux',
-        'RedHat': 'Red Hat',
-        'Altlinux': 'ALT',
-        'SMGL': 'Source Mage GNU/Linux',
-    }
-    */
+func (o *OSRelease) parsefile(filename string) bool {
+	retv := false
+	file, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		instring := scanner.Bytes()
+		if o.isCentOS(instring) {
+			retv = true
+			break
+		}
+	}
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+	return retv
+}
+
+
 func (o *OSRelease) GetPlatform() {
-	if runtime.GOOS != "linux" {
+	o.kernel = runtime.GOOS
+	if o.kernel != "linux" {
 		return
 	}
+	o.Version = "undef"
+	o.Name    = "undef"
 	infosets := getInfoSets()
 	for _, y := range infosets {
-		content, err := ioutil.ReadFile(y.Filename)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Print(string(content))
+		o.parsefile(y.Filename)
 	}
 }
 

@@ -1,8 +1,8 @@
-//          FILE:  platform.go
+//          FILE:  getplatform_centos.go
 // 
-//         USAGE:  platform.go
+//         USAGE:  getplatform_centos.go
 // 
-//   DESCRIPTION:  $description
+//   DESCRIPTION:  Test if this is a CentOS line
 // 
 //       OPTIONS:  ---
 //  REQUIREMENTS:  ---
@@ -32,18 +32,21 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 //
-package main
+package go_platform
 
 import (
-    "fmt"
-    "github.com/jvzantvoort/go_platform"
+	"regexp"
 )
 
-func main() {
-	platf := go_platform.OSRelease{}
-	platf.GetPlatform()
-	fmt.Printf("name=%s\n", platf.Name)
-	fmt.Printf("version=%s\n", platf.Version)
-	fmt.Printf("major_version=%s\n", platf.MajorVersion)
+func (o *OSRelease) isCentOS(instring []byte) bool {
+	re := regexp.MustCompile(`CentOS Linux release ((\d+)\.(\d+)\.(\d+))`)
+	matches := re.FindSubmatch(instring)
+	if len(matches) ==  0 {
+		return false
+	}
+	o.Name = "CentOS"
+	o.MajorVersion = string(matches[2])
+	o.Version = string(matches[2]) + "." + string(matches[3])
+	return true
 }
 // vim: noexpandtab filetype=go
