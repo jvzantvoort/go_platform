@@ -1,3 +1,12 @@
+// Command line wrapper for go_platform.
+//
+// Example output:
+//  # go_platform
+//  name=CentOS
+//  version=7.7
+//  major_version=7
+//
+
 package main
 
 import (
