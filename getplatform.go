@@ -29,6 +29,7 @@ type LSBInfo struct {
 	AllowEmpty bool
 }
 
+// lsbInfoSets a list of structs with options
 var lsbInfoSets = []LSBInfo{
 	LSBInfo{Filename: "/etc/alpine-release", Name: "Alpine"},
 	LSBInfo{Filename: "/etc/altlinux-release", Name: "Altlinux"},
@@ -70,6 +71,7 @@ func getInfoSets() []LSBInfo {
 	return retv
 }
 
+// parseFile example
 func (o *OSRelease) parseFile(filename string) bool {
 	retv := false
 	file, err := os.Open(filename)
@@ -93,7 +95,17 @@ func (o *OSRelease) parseFile(filename string) bool {
 }
 
 
-// GetPlatform set the Kernel, Version and Name
+// GetPlatform set the Kernel, Version and Name:
+//  import (
+//          "fmt"
+//          "github.com/jvzantvoort/go_platform"
+//  )
+//  platf := go_platform.OSRelease{}
+//  platf.GetPlatform()
+//  fmt.Printf("name=%s\n", platf.Name)
+//  fmt.Printf("version=%s\n", platf.Version)
+//  fmt.Printf("major_version=%s\n", platf.MajorVersion)
+//
 func (o *OSRelease) GetPlatform() {
 	o.Kernel = runtime.GOOS
 	if o.Kernel != "linux" {

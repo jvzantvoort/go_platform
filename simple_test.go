@@ -13,6 +13,16 @@ const (
 	VERSION = "7.7"
 )
 
+// This example examples
+func ExampleisCentOS() {
+	platf := go_platform.OSRelease{}
+	platf.GetPlatform()
+	fmt.Printf("name=%s\n", platf.Name)
+	fmt.Printf("version=%s\n", platf.Version)
+	fmt.Printf("major_version=%s\n", platf.MajorVersion)
+
+}
+
 func TestPlatformName(t *testing.T) {
 	platform_obj := go_platform.OSRelease{}
 	platform_obj.GetPlatform()

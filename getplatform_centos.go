@@ -6,11 +6,11 @@ import (
 
 // isCentOS returns true if system OS is centos:
 //
-//   if osr.isCentOS() {
-//       fmt.Println("Centos")
-//   } else {
-//       fmt.Println("Not centos")
-//   }
+//  if osr.isCentOS() {
+//      fmt.Println("Centos")
+//  } else {
+//      fmt.Println("Not centos")
+//  }
 //
 func (o *OSRelease) isCentOS(instring []byte) bool {
 	re := regexp.MustCompile(`CentOS Linux release ((\d+)\.(\d+)\.(\d+))`)
