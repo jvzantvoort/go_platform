@@ -8,18 +8,18 @@
 package go_platform
 
 import (
-	"log"
 	"bufio"
+	"log"
 	"os"
 	"runtime"
 )
 
 // Struct to contain the relevant variables
 type OSRelease struct {
-	Kernel  string
+	Kernel       string
 	MajorVersion string
-	Version string
-	Name    string
+	Version      string
+	Name         string
 }
 
 // LSBInfo contains parameters and ...
@@ -87,13 +87,17 @@ func (o *OSRelease) parseFile(filename string) bool {
 			retv = true
 			break
 		}
+		if o.isRedHat(instring) {
+			retv = true
+			break
+		}
+
 	}
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
 	return retv
 }
-
 
 // GetPlatform set the Kernel, Version and Name:
 //  import (
@@ -112,7 +116,7 @@ func (o *OSRelease) GetPlatform() {
 		return
 	}
 	o.Version = "undef"
-	o.Name    = "undef"
+	o.Name = "undef"
 	infosets := getInfoSets()
 	for _, y := range infosets {
 		o.parseFile(y.Filename)
